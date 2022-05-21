@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"math/big"
 	"os"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -11,7 +12,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/joho/godotenv"
-	"github.com/kokukuma/money_box/contract"
+	money_box "github.com/kokukuma/money_box/contract"
 )
 
 const (
@@ -24,7 +25,8 @@ type Deployer func(auth *bind.TransactOpts, backend bind.ContractBackend) (commo
 
 func main() {
 	if err := Deploy(func(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, error) {
-		contractAddress, tx, _, err := contract.DeployMoneyBox(auth, backend)
+		auth.Value = big.NewInt(100)
+		contractAddress, tx, _, err := money_box.DeployMoneyBox(auth, backend)
 		return contractAddress, tx, err
 	}); err != nil {
 		log.Fatalf("failed to deploy sample: %v", err)
@@ -58,6 +60,7 @@ func Deploy(deployFunc Deployer) error {
 	if err != nil {
 		return err
 	}
+
 	auth.GasPrice = gasPrice
 
 	contractAddress, tx, err := deployFunc(auth, client)

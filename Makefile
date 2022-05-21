@@ -6,7 +6,7 @@ all: build
 build:  ## make contract and abi
 	solc --abi --bin sol/*.sol -o bin --overwrite
 
-	abigen --abi="bin/MoneyBox.abi" --bin="bin/MoneyBox.bin" --pkg=contract --out="contract/money_box.go"
+	abigen --abi="bin/MoneyBox.abi" --bin="bin/MoneyBox.bin" --pkg=money_box --out="contract/money_box.go"
 
 .PHONY: run
 run:  ## run contract

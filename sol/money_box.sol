@@ -2,24 +2,28 @@ pragma solidity ^0.8.11;
 
 contract MoneyBox {
     address public god;
-    uint public amount;
+    uint randNonce;
 
     constructor() payable public {
+        require(msg.value > 0);
         god = msg.sender;
-        amount = msg.value;
+        randNonce = block.timestamp;
     }
 
     function pray() payable public  {
-        amount += msg.value;
-        uint randNonce = 0;
-        uint random = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNonce))) % 100;
-        if (random < 1) {
-            payable(msg.sender).transfer(amount);
+        uint random = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNonce))) % 10;
+        if (random < 2) {
+            payable(msg.sender).transfer(address(this).balance);
         }
+    }
+
+    function balance() public view returns (uint256) {
+        return address(this).balance;
     }
 
     function godCollect() public {
         require(msg.sender == god);
-        payable(msg.sender).transfer(amount);
+        selfdestruct(payable(god));
     }
+
 }

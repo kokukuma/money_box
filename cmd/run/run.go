@@ -10,14 +10,15 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/joho/godotenv"
-	"github.com/kokukuma/money_box/contract"
+	money_box "github.com/kokukuma/money_box/contract"
 )
 
 const (
 	// rpcProviderURL = "https://polygon-rpc.com"
 	rpcProviderURL = "https://ropsten.infura.io/v3/15f721c4df8c4f4f91dea73670b27d11"
 
-	contractAddress = "8b6F44eB598e240d8608b42cc04EBdBfA360BB09"
+	contractAddress = "a5D4B887Ac0d118D9C2C7c75918379B438E85A00"
+	accountAddress  = "7E532D0E80480eCF1b566920752840bc53556366"
 )
 
 func main() {
@@ -36,25 +37,36 @@ func main() {
 	}
 	defer client.Close()
 
-	if err := MoneyBox(ctx, client, auth); err != nil {
+	if err := MoneyBoxGetAmoutn(ctx, client, auth); err != nil {
 		fmt.Println(err)
 	}
-	//
-	// if err := CoinMint(ctx, client, auth); err != nil {
-	// 	fmt.Println(err)
-	// }
-	//
-	// if err := CoinSend(ctx, client, auth); err != nil {
-	// 	fmt.Println(err)
-	// }
-	//
-	// if err := CoinGet(ctx, client, auth); err != nil {
+	if err := MoneyBoxPray(ctx, client, auth); err != nil {
+		fmt.Println(err)
+	}
+	// if err := MoneyGodCollect(ctx, client, auth); err != nil {
 	// 	fmt.Println(err)
 	// }
 }
 
-func MoneyBox(ctx context.Context, client *ethclient.Client, auth *bind.TransactOpts) error {
-	instance, err := contract.NewSample(common.HexToAddress(contractAddress), client)
+func MoneyBoxGetAmoutn(ctx context.Context, client *ethclient.Client, auth *bind.TransactOpts) error {
+	instance, err := money_box.NewMoneyBox(common.HexToAddress(contractAddress), client)
+	if err != nil {
+		return err
+	}
+
+	val, err := instance.Balance(&bind.CallOpts{
+		Pending: false,
+		From:    auth.From,
+	})
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Current Amount: %d\n", val)
+	return nil
+}
+
+func MoneyBoxPray(ctx context.Context, client *ethclient.Client, auth *bind.TransactOpts) error {
+	instance, err := money_box.NewMoneyBox(common.HexToAddress(contractAddress), client)
 	if err != nil {
 		return err
 	}
@@ -64,22 +76,37 @@ func MoneyBox(ctx context.Context, client *ethclient.Client, auth *bind.Transact
 		return err
 	}
 	auth.GasPrice = gasPrice
+	auth.Value = big.NewInt(100)
 
 	// opts *bind.TransactOpts, x *big.Int
-	tx, err := instance.Set(auth, big.NewInt(1))
+	tx, err := instance.Pray(auth)
 	if err != nil {
 		return err
 	}
 	fmt.Printf("Set deployed! Wait for tx %s to be confirmed.\n", tx.Hash().Hex())
 
-	val, err := instance.Get(&bind.CallOpts{
-		Pending: false,
-		From:    auth.From,
-	})
+	return nil
+}
+
+func MoneyGodCollect(ctx context.Context, client *ethclient.Client, auth *bind.TransactOpts) error {
+	instance, err := money_box.NewMoneyBox(common.HexToAddress(contractAddress), client)
 	if err != nil {
 		return err
 	}
-	fmt.Println(val)
+
+	gasPrice, err := GasPrice(ctx, client)
+	if err != nil {
+		return err
+	}
+	gasPrice.Mul(gasPrice, big.NewInt(3))
+	auth.GasPrice = gasPrice
+
+	// opts *bind.TransactOpts, x *big.Int
+	tx, err := instance.GodCollect(auth)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Set deployed! Wait for tx %s to be confirmed.\n", tx.Hash().Hex())
 
 	return nil
 }
