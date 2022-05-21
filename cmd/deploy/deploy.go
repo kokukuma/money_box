@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"math/big"
 	"os"
@@ -70,6 +72,15 @@ func Deploy(deployFunc Deployer) error {
 	fmt.Printf("Contract deployed! Wait for tx %s to be confirmed.\n", tx.Hash().Hex())
 	fmt.Printf("Contract Address: %s", contractAddress.Hex())
 
+	bytes, err := json.Marshal(&struct {
+		Address string `json:"address"`
+	}{
+		Address: contractAddress.Hex(),
+	})
+	if err != nil {
+		return err
+	}
+	ioutil.WriteFile("contract_address.json", bytes, os.ModePerm)
 	return nil
 }
 

@@ -17,6 +17,8 @@
 import Web3 from "web3";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import contractJSON from '../assets/MoneyBox.json'
+import contractAddress from '../assets/contract_address.json'
+
 
 const provider = new WalletConnectProvider({
   infuraId: "15f721c4df8c4f4f91dea73670b27d11",
@@ -28,6 +30,15 @@ const provider = new WalletConnectProvider({
 });
 
 const web3 = new Web3(provider);
+
+const myContract = new web3.eth.Contract(contractJSON, contractAddress.address);
+
+myContract.events.allEvents(function(error, event){
+  console.log("---------------- event2");
+  console.log(event);
+  console.log(`event called: ${event.event}`);
+  console.log(JSON.stringify(event, null, "    "));
+})
 
 // Subscribe to accounts change
 provider.on("accountsChanged", (accounts) => {
@@ -65,10 +76,6 @@ export default {
       alert("disconnected")
     },
     getBalance: async function () {
-      var myContract = new web3.eth.Contract(contractJSON, '0xa5D4B887Ac0d118D9C2C7c75918379B438E85A00', {
-        from: this.accounts[0],
-        // gasPrice: '20000000000' // default gas price in wei, 20 gwei in this case
-      });
       const res = await myContract.methods.balance().call({
         from: this.accounts[0],
       }, function(error){
@@ -79,12 +86,6 @@ export default {
       this.balance = res
     },
     pray: async function () {
-      var myContract = new web3.eth.Contract(contractJSON, '0xa5D4B887Ac0d118D9C2C7c75918379B438E85A00', {
-        from: this.accounts[0],
-        // gasPrice: '20000000000' // default gas price in wei, 20 gwei in this case
-      });
-
-      //
       const res = await myContract.methods.pray().send({
         from: this.accounts[0],
         value: 100,
@@ -93,6 +94,7 @@ export default {
           console.log(error)
         }
       })
+      console.log("-------")
       console.log(res)
       this.getBalance()
     },

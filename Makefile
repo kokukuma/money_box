@@ -15,6 +15,7 @@ run:  ## run contract
 .PHONY: deploy
 deploy: ## deploy contract
 	go run cmd/deploy/deploy.go
+	cp contract_address.json frontend/src/assets/
 
 .PHONY: serve
 serve: ## deploy contract

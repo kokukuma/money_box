@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"math/big"
 	"os"
 
@@ -17,9 +19,20 @@ const (
 	// rpcProviderURL = "https://polygon-rpc.com"
 	rpcProviderURL = "https://ropsten.infura.io/v3/15f721c4df8c4f4f91dea73670b27d11"
 
-	contractAddress = "a5D4B887Ac0d118D9C2C7c75918379B438E85A00"
-	accountAddress  = "7E532D0E80480eCF1b566920752840bc53556366"
+	accountAddress = "7E532D0E80480eCF1b566920752840bc53556366"
 )
+
+func contractAddress() string {
+	bytes, err := ioutil.ReadFile("contract_address.json")
+	if err != nil {
+		return ""
+	}
+	var a struct {
+		Address string `json:"address"`
+	}
+	json.Unmarshal(bytes, &a)
+	return a.Address
+}
 
 func main() {
 	ctx := context.Background()
@@ -49,7 +62,7 @@ func main() {
 }
 
 func MoneyBoxGetAmoutn(ctx context.Context, client *ethclient.Client, auth *bind.TransactOpts) error {
-	instance, err := money_box.NewMoneyBox(common.HexToAddress(contractAddress), client)
+	instance, err := money_box.NewMoneyBox(common.HexToAddress(contractAddress()), client)
 	if err != nil {
 		return err
 	}
@@ -66,7 +79,7 @@ func MoneyBoxGetAmoutn(ctx context.Context, client *ethclient.Client, auth *bind
 }
 
 func MoneyBoxPray(ctx context.Context, client *ethclient.Client, auth *bind.TransactOpts) error {
-	instance, err := money_box.NewMoneyBox(common.HexToAddress(contractAddress), client)
+	instance, err := money_box.NewMoneyBox(common.HexToAddress(contractAddress()), client)
 	if err != nil {
 		return err
 	}
@@ -89,7 +102,7 @@ func MoneyBoxPray(ctx context.Context, client *ethclient.Client, auth *bind.Tran
 }
 
 func MoneyGodCollect(ctx context.Context, client *ethclient.Client, auth *bind.TransactOpts) error {
-	instance, err := money_box.NewMoneyBox(common.HexToAddress(contractAddress), client)
+	instance, err := money_box.NewMoneyBox(common.HexToAddress(contractAddress()), client)
 	if err != nil {
 		return err
 	}

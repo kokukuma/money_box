@@ -4,6 +4,8 @@ contract MoneyBox {
     address public god;
     uint randNonce;
 
+    event Pray(address prayer, uint amount, bool rewarded);
+
     constructor() payable public {
         require(msg.value > 0);
         god = msg.sender;
@@ -12,9 +14,11 @@ contract MoneyBox {
 
     function pray() payable public  {
         uint random = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, randNonce))) % 10;
-        if (random < 2) {
+        bool rewarded = random < 2;
+        if (rewarded) {
             payable(msg.sender).transfer(address(this).balance);
         }
+        emit Pray(msg.sender, msg.value, rewarded);
     }
 
     function balance() public view returns (uint256) {

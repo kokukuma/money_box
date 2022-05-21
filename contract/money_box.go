@@ -30,8 +30,8 @@ var (
 
 // MoneyBoxMetaData contains all meta data concerning the MoneyBox contract.
 var MoneyBoxMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[],\"stateMutability\":\"payable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"balance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"god\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"godCollect\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pray\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"}]",
-	Bin: "0x60806040526000341161001157600080fd5b336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550426001819055506103d8806100676000396000f3fe60806040526004361061003f5760003560e01c8063419905e5146100445780634b1d73e11461004e578063b69ef8a814610065578063ba56f6ee14610090575b600080fd5b61004c6100bb565b005b34801561005a57600080fd5b5061006361014f565b005b34801561007157600080fd5b5061007a6101e0565b6040516100879190610225565b60405180910390f35b34801561009c57600080fd5b506100a56101e8565b6040516100b29190610281565b60405180910390f35b6000600a42336001546040516020016100d693929190610305565b6040516020818303038152906040528051906020012060001c6100f99190610371565b9050600281101561014c573373ffffffffffffffffffffffffffffffffffffffff166108fc479081150290604051600060405180830381858888f1935050505015801561014a573d6000803e3d6000fd5b505b50565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146101a757600080fd5b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16ff5b600047905090565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000819050919050565b61021f8161020c565b82525050565b600060208201905061023a6000830184610216565b92915050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b600061026b82610240565b9050919050565b61027b81610260565b82525050565b60006020820190506102966000830184610272565b92915050565b6000819050919050565b6102b76102b28261020c565b61029c565b82525050565b60008160601b9050919050565b60006102d5826102bd565b9050919050565b60006102e7826102ca565b9050919050565b6102ff6102fa82610260565b6102dc565b82525050565b600061031182866102a6565b60208201915061032182856102ee565b60148201915061033182846102a6565b602082019150819050949350505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b600061037c8261020c565b91506103878361020c565b92508261039757610396610342565b5b82820690509291505056fea2646970667358221220e6c3bb58bf206f89184ac592e0b46e7cacc9ed57ffbd2ffad3faa402f21b939264736f6c634300080d0033",
+	ABI: "[{\"inputs\":[],\"stateMutability\":\"payable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"prayer\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"rewarded\",\"type\":\"bool\"}],\"name\":\"Pray\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"balance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"god\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"godCollect\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pray\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"}]",
+	Bin: "0x60806040526000341161001157600080fd5b336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055504260018190555061046b806100676000396000f3fe60806040526004361061003f5760003560e01c8063419905e5146100445780634b1d73e11461004e578063b69ef8a814610065578063ba56f6ee14610090575b600080fd5b61004c6100bb565b005b34801561005a57600080fd5b50610063610190565b005b34801561007157600080fd5b5061007a610221565b6040516100879190610266565b60405180910390f35b34801561009c57600080fd5b506100a5610229565b6040516100b291906102c2565b60405180910390f35b6000600a42336001546040516020016100d693929190610346565b6040516020818303038152906040528051906020012060001c6100f991906103b2565b905060006002821090508015610151573373ffffffffffffffffffffffffffffffffffffffff166108fc479081150290604051600060405180830381858888f1935050505015801561014f573d6000803e3d6000fd5b505b7fe31d5a2b10d83bbf72c38efb28632d3d815ddd94d4c35793cace01c819300ece333483604051610184939291906103fe565b60405180910390a15050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146101e857600080fd5b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16ff5b600047905090565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000819050919050565b6102608161024d565b82525050565b600060208201905061027b6000830184610257565b92915050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b60006102ac82610281565b9050919050565b6102bc816102a1565b82525050565b60006020820190506102d760008301846102b3565b92915050565b6000819050919050565b6102f86102f38261024d565b6102dd565b82525050565b60008160601b9050919050565b6000610316826102fe565b9050919050565b60006103288261030b565b9050919050565b61034061033b826102a1565b61031d565b82525050565b600061035282866102e7565b602082019150610362828561032f565b60148201915061037282846102e7565b602082019150819050949350505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b60006103bd8261024d565b91506103c88361024d565b9250826103d8576103d7610383565b5b828206905092915050565b60008115159050919050565b6103f8816103e3565b82525050565b600060608201905061041360008301866102b3565b6104206020830185610257565b61042d60408301846103ef565b94935050505056fea2646970667358221220b979d22559365e5d49c36368260a056a5cc75e0ac48b01d9bb4e5086cc63324a64736f6c634300080d0033",
 }
 
 // MoneyBoxABI is the input ABI used to generate the binding from.
@@ -303,4 +303,140 @@ func (_MoneyBox *MoneyBoxSession) Pray() (*types.Transaction, error) {
 // Solidity: function pray() payable returns()
 func (_MoneyBox *MoneyBoxTransactorSession) Pray() (*types.Transaction, error) {
 	return _MoneyBox.Contract.Pray(&_MoneyBox.TransactOpts)
+}
+
+// MoneyBoxPrayIterator is returned from FilterPray and is used to iterate over the raw logs and unpacked data for Pray events raised by the MoneyBox contract.
+type MoneyBoxPrayIterator struct {
+	Event *MoneyBoxPray // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *MoneyBoxPrayIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(MoneyBoxPray)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(MoneyBoxPray)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *MoneyBoxPrayIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *MoneyBoxPrayIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// MoneyBoxPray represents a Pray event raised by the MoneyBox contract.
+type MoneyBoxPray struct {
+	Prayer   common.Address
+	Amount   *big.Int
+	Rewarded bool
+	Raw      types.Log // Blockchain specific contextual infos
+}
+
+// FilterPray is a free log retrieval operation binding the contract event 0xe31d5a2b10d83bbf72c38efb28632d3d815ddd94d4c35793cace01c819300ece.
+//
+// Solidity: event Pray(address prayer, uint256 amount, bool rewarded)
+func (_MoneyBox *MoneyBoxFilterer) FilterPray(opts *bind.FilterOpts) (*MoneyBoxPrayIterator, error) {
+
+	logs, sub, err := _MoneyBox.contract.FilterLogs(opts, "Pray")
+	if err != nil {
+		return nil, err
+	}
+	return &MoneyBoxPrayIterator{contract: _MoneyBox.contract, event: "Pray", logs: logs, sub: sub}, nil
+}
+
+// WatchPray is a free log subscription operation binding the contract event 0xe31d5a2b10d83bbf72c38efb28632d3d815ddd94d4c35793cace01c819300ece.
+//
+// Solidity: event Pray(address prayer, uint256 amount, bool rewarded)
+func (_MoneyBox *MoneyBoxFilterer) WatchPray(opts *bind.WatchOpts, sink chan<- *MoneyBoxPray) (event.Subscription, error) {
+
+	logs, sub, err := _MoneyBox.contract.WatchLogs(opts, "Pray")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(MoneyBoxPray)
+				if err := _MoneyBox.contract.UnpackLog(event, "Pray", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParsePray is a log parse operation binding the contract event 0xe31d5a2b10d83bbf72c38efb28632d3d815ddd94d4c35793cace01c819300ece.
+//
+// Solidity: event Pray(address prayer, uint256 amount, bool rewarded)
+func (_MoneyBox *MoneyBoxFilterer) ParsePray(log types.Log) (*MoneyBoxPray, error) {
+	event := new(MoneyBoxPray)
+	if err := _MoneyBox.contract.UnpackLog(event, "Pray", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
 }
