@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"math/big"
 	"os"
 
@@ -18,6 +19,7 @@ import (
 const (
 	// rpcProviderURL = "https://polygon-rpc.com"
 	rpcProviderURL = "https://ropsten.infura.io/v3/15f721c4df8c4f4f91dea73670b27d11"
+	wsURL          = "wss://ropsten.infura.io/ws/v3/15f721c4df8c4f4f91dea73670b27d11"
 
 	accountAddress = "7E532D0E80480eCF1b566920752840bc53556366"
 )
@@ -59,6 +61,32 @@ func main() {
 	// if err := MoneyGodCollect(ctx, client, auth); err != nil {
 	// 	fmt.Println(err)
 	// }
+
+	///////////////
+	wsClient, err := ethclient.Dial(wsURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	wsIns, err := money_box.NewMoneyBox(common.HexToAddress(contractAddress()), wsClient)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	channel := make(chan *money_box.MoneyBoxPray)
+	sub, err := wsIns.WatchPray(&bind.WatchOpts{Context: ctx, Start: nil}, channel)
+	if err != nil {
+		fmt.Println(err)
+	}
+	// defer sub.Unsubscribe()
+
+	for {
+		select {
+		case err := <-sub.Err():
+			log.Fatal(err)
+		case ev := <-channel:
+			fmt.Println(ev.Prayer, ev.Amount, ev.Rewarded)
+		}
+	}
 }
 
 func MoneyBoxGetAmoutn(ctx context.Context, client *ethclient.Client, auth *bind.TransactOpts) error {

@@ -33,8 +33,10 @@ const web3 = new Web3(provider);
 
 const myContract = new web3.eth.Contract(contractJSON, contractAddress.address);
 
-myContract.events.allEvents(function(error, event){
-  console.log("---------------- event2");
+const evContract = new web3.eth.Contract(contractJSON, contractAddress.address);
+evContract.setProvider('wss://ropsten.infura.io/ws/v3/15f721c4df8c4f4f91dea73670b27d11');
+evContract.events.allEvents(function(error, event){
+  console.log("---------------- event");
   console.log(event);
   console.log(`event called: ${event.event}`);
   console.log(JSON.stringify(event, null, "    "));
