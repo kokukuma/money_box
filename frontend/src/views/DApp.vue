@@ -55,7 +55,7 @@ provider.on("chainChanged", (chainId) => {
 // Subscribe to session disconnection
 provider.on("connect", async () => {
   const accounts = await web3.eth.getAccounts();
-  alert(accounts);
+  console.log(accounts)
 });
 
 export default {
@@ -70,12 +70,12 @@ export default {
   methods: {
     connect: async function () {
       await provider.enable();
-      alert("connected")
+      console.log("connected")
       this.accounts = await web3.eth.getAccounts();
     },
     disconnect: async function () {
       await provider.disconnect();
-      alert("disconnected")
+      console.log("disconnected")
     },
     getBalance: async function () {
       const res = await myContract.methods.balance().call({

@@ -54,8 +54,29 @@ export default {
       this.connector.killSession()
     },
     showApproval: async function(peerMeta) {
+      // TODO: 鍵作成
       this.step = "approval"
       this.app_name = peerMeta
+    },
+    call: async function(method, params) {
+      // TODO: eth_sendTransaction
+      console.log(method)
+      console.log(params)
+
+      // // Approve Call Request
+      // this.connector.approveRequest({
+      //   id: 1,
+      //   result: "0x41791102999c339c844880b23950704cc43aa840f3739e365323cda4dfa89e7a"
+      // });
+      //
+      // // Reject Call Request
+      // this.connector.rejectRequest({
+      //   id: 1,                                  // required
+      //   error: {
+      //     code: "OPTIONAL_ERROR_CODE"           // optional
+      //     message: "OPTIONAL_ERROR_MESSAGE"     // optional
+      //   }
+      // });
     },
     submit: async function () {
       console.log(this.wc_url)
@@ -84,9 +105,7 @@ export default {
         if (error) {
           throw error;
         }
-        // TODO: eth_sendTransaction
-        console.log(payload.method)
-        console.log(payload.params)
+        this.call(payload.method, payload.params)
       });
       this.connector.on("disconnect", (error, payload) => {
         if (error) {
