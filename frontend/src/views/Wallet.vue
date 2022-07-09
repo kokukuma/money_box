@@ -1,7 +1,7 @@
 <template>
   <div class="wallet">
     <div v-if="!accountExists">
-      <b-button @click="reCreateAccount" variant="danger">Re Create Account</b-button>
+      <b-button @click="createAccount" variant="danger">Create Account</b-button>
     </div>
 
     <div v-if="accountExists">
@@ -22,8 +22,8 @@
       </div>
 
       <!-- Table -->
-      <div v-if="calls.length!==0">
-        <b-table striped hover :items="calls">
+      <div v-if="call_candidate.length!==0">
+        <b-table striped hover :items="call_candidate">
           <template v-slot:cell(payload)="data">
             <b-button @click="call(data.item.payload)" variant="primary">call</b-button>
           </template>
@@ -59,13 +59,19 @@
     </b-modal>
 
     <b-modal id="modal-call" title="Scan">
-      <div>ID: <strong>{{ this.call_payload.id }}</strong></div>
-      <div>Method: <strong>{{ this.call_payload.method }}</strong></div>
-      <div>Params: <strong>{{ this.call_payload.params }}</strong></div>
-      <br />
-      <b-button @click="call_approve" variant="primary">Approve</b-button>
-      <b-button @click="call_reject" variant="primary">Reject</b-button>
-      <br />
+      <CallRequest
+        :call_payload="call_payload"
+        :connector="connector"
+        :accounts="accounts"
+        @called="handleCalled"
+      />
+      <!-- <div>ID: <strong>{{ this.call_payload.id }}</strong></div> -->
+      <!-- <div>Method: <strong>{{ this.call_payload.method }}</strong></div> -->
+      <!-- <div>Params: <strong>{{ this.call_payload.params }}</strong></div> -->
+      <!-- <br /> -->
+      <!-- <b&#45;button @click="call_approve" variant="primary">Approve</b&#45;button> -->
+      <!-- <b&#45;button @click="call_reject" variant="primary">Reject</b&#45;button> -->
+      <!-- <br /> -->
     </b-modal>
 
   </div>
@@ -73,6 +79,7 @@
 
 <script>
 import WalletConnect from "@walletconnect/client";
+import CallRequest from '@/components/CallRequest.vue'
 
 export default {
   name: "Wallet",
@@ -86,10 +93,12 @@ export default {
       connectedSites: [],
       candidateSites: "",
       call_payload: {},
-      calls: [],
+      call_candidate: [],
     }
   },
-  components: {},
+  components: {
+    CallRequest,
+  },
   created: function () {
     this.accounts = this.getAccount()
     if (this.accounts != null) {
@@ -114,15 +123,6 @@ export default {
       let accounts = web3.eth.accounts.privateKeyToAccount(privateKey);
       return accounts
     },
-    reCreateAccount: async function() {
-      let conf = window.confirm('Is it ok to recreate account?');
-      if (conf) {
-       this.accounts = await this.createAccount()
-       if (this.accounts != null) {
-         this.accountExists = true
-       }
-      }
-    },
     createAccount: async function() {
       var Accounts = require('web3-eth-accounts');
       var accounts = new Accounts('https://ropsten.infura.io/v3/15f721c4df8c4f4f91dea73670b27d11');
@@ -134,9 +134,6 @@ export default {
     },
     approve: async function() {
       this.accounts = this.getAccount()
-      if (this.accounts == null) {
-        this.accounts = await this.createAccount()
-      }
       console.log("--------------- ap")
       console.log(this.accounts)
 
@@ -177,55 +174,13 @@ export default {
     call: async function(payload) {
       console.log(payload)
       this.call_payload = payload
+
       this.$bvModal.show("modal-call")
     },
-    call_reject: async function() {
-      this.connector.rejectRequest({
-        id: this.call_payload.id ,
-        error: {
-          code: "OPTIONAL_ERROR_CODE",
-          message: "OPTIONAL_ERROR_MESSAGE"
-        }
-      });
+    handleCalled: async function(id) {
       this.$bvModal.hide("modal-call")
-    },
-    call_approve: async function() {
-      const method = this.call_payload.method
-      const params = this.call_payload.params
-      const id = this.call_payload.id
-
-      var Web3 = require('web3');
-      var web3 = new Web3('https://ropsten.infura.io/v3/15f721c4df8c4f4f91dea73670b27d11')
-      console.log(web3.eth)
-      web3.eth.getGasPrice().then(console.log);
-
-      // TODO: eth_sendTransaction
-      console.log(method)
-      console.log(params)
-      console.log(this.accounts)
-      // var gasPrice = await web3.eth.getGasPrice()
-      // params[0].gas = parseInt(gasPrice * 1.3, 10)
-      params[0].gas = 4712388
-
-      this.$bvModal.hide("modal-call")
-      let updatedcalls = []
-      for (let i = 0; i < this.calls.length; i++) {
-          if (this.calls[i].id != id) {
-            updatedcalls.push(this.calls[i])
-          }
-      }
-      this.calls = updatedcalls
-
-      const data = await this.accounts.signTransaction(params[0])
-      console.log(data)
-
-      const res = await web3.eth.sendSignedTransaction(data.rawTransaction)
-      console.log(res)
-
-      this.connector.approveRequest({
-        id: id,
-        result: res.transactionHash,
-      });
+      this.$store.commit('del_calls', id)
+      this.updateCallCandidate()
     },
     submit: async function () {
       console.log(this.wc_url)
@@ -238,6 +193,18 @@ export default {
       });
       this.setEvent(this.connector)
       console.log(this.connector)
+    },
+    updateCallCandidate: async function() {
+      this.call_candidate = []
+      for (let i=0; i < Object.keys(this.$store.state.calls).length; i++){
+        let key = Object.keys(this.$store.state.calls)[i]
+        let payload = this.$store.state.calls[key]
+        this.call_candidate.push({
+          id: payload.id,
+          method: payload.method,
+          payload: payload,
+        })
+      }
     },
     setEvent(connector) {
       connector.on("session_request", (error, payload) => {
@@ -252,11 +219,9 @@ export default {
           throw error;
         }
         console.log("------------- call_request")
-        this.calls.push({
-          id: payload.id,
-          method: payload.method,
-          payload: payload,
-        })
+        this.$store.commit('set_calls', payload)
+        console.log(this.$store.state.calls)
+        this.updateCallCandidate()
       });
       connector.on("disconnect", (error, payload) => {
         if (error) {
