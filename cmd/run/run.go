@@ -116,6 +116,7 @@ func MoneyBoxPray(ctx context.Context, client *ethclient.Client, auth *bind.Tran
 	if err != nil {
 		return err
 	}
+	fmt.Println("gasPrice: ", gasPrice)
 	auth.GasPrice = gasPrice
 	auth.Value = big.NewInt(100)
 
